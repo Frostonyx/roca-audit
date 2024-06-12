@@ -1,5 +1,5 @@
-import React, { useState, CSSProperties } from 'react';
-
+import React, { useState, CSSProperties, useEffect } from 'react';
+import { useDataContext } from "@/context/dataContext";
 import {
   useCSVReader,
   lightenDarkenColor,
@@ -18,8 +18,6 @@ const GREY_DIM = '#686868';
 const styles = {
   zone: {
     alignItems: 'center',
-    border: `2px dashed ${GREY}`,
-    borderRadius: 20,
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
@@ -79,18 +77,24 @@ const styles = {
   } as CSSProperties,
 };
 
+
+
 export default function CSVReader() {
   const { CSVReader } = useCSVReader();
   const [zoneHover, setZoneHover] = useState(false);
   const [removeHoverColor, setRemoveHoverColor] = useState(
     DEFAULT_REMOVE_HOVER_COLOR
   );
-
+  const { csvData, setCsvData } = useDataContext();
+  useEffect(()=>{
+  console.log('Headers', csvData[0])
+},[csvData])
   return (
     <CSVReader
       onUploadAccepted={(results: any) => {
         console.log('---------------------------');
         console.log(results);
+        setCsvData(results.data);
         console.log('---------------------------');
         setZoneHover(false);
       }}

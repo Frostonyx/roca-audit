@@ -1,3 +1,6 @@
+
+
+import { DataContextProvider } from "@/context/dataContext";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,8 +15,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <DataContextProvider>
     <html lang="en">
       <body>{children}</body>
     </html>
+    </DataContextProvider>
   );
 }
