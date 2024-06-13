@@ -3,15 +3,20 @@ import { AppBar, Container, Toolbar, Typography, Box, IconButton, Menu, MenuItem
 import React from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useDataContext } from "@/context/dataContext";
 const pages = ['home','audit'];
 
 export default function NavBar(){
     const router = useRouter()
-
+    const { csvData, setCsvData } = useDataContext();
     const links = [
         {name: "Home", url: "/"},
-        {name: "Audit", url: "/audit"},
     ];
+    
+    const handleReset = () => {
+        setCsvData([])
+    }
+
     
     return (
         <header>
@@ -19,15 +24,15 @@ export default function NavBar(){
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex' } }}>
-                        {links.map((link, i) => (
-                        <Link key={i} href={link.url} passHref>
+    
+                        <Link href={"/"} passHref>
                             <Button
-                                sx={{ my: 2, color: 'white', display: 'block' }}
+                                sx={{ my: 2, color: 'white', display: 'block' }} onClick={handleReset}
                             >
-                                {link.name}
+                                Home
                             </Button>
                         </Link>
-                        ))}
+
                     </Box>
 
                     </Toolbar>

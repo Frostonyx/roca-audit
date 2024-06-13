@@ -1,3 +1,8 @@
+/*
+Stylized csvReader component pulled from open source example found at:
+https://github.com/Bunlong/react-papaparse/tree/v4.0.0
+and modified for use in this project.
+*/
 import React, { useState, CSSProperties, useEffect } from 'react';
 import { useDataContext } from "@/context/dataContext";
 import {
