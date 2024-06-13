@@ -90,16 +90,15 @@ export default function CSVReader() {
   const [removeHoverColor, setRemoveHoverColor] = useState(
     DEFAULT_REMOVE_HOVER_COLOR
   );
-  const { csvData, setCsvData } = useDataContext();
-  useEffect(()=>{
-  console.log('Headers', csvData[0])
-},[csvData])
+  const { setFileName, setCsvData } = useDataContext();
+
   return (
     <CSVReader
-      onUploadAccepted={(results: any) => {
+      onUploadAccepted={(results: any, file: File) => {
         console.log('---------------------------');
         console.log(results);
         setCsvData(results.data);
+        setFileName(file.name);
         console.log('---------------------------');
         setZoneHover(false);
       }}

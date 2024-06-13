@@ -11,13 +11,14 @@ import { useDataContext } from "@/context/dataContext";
 import { Box, Button, Typography, styled } from "@mui/material";
 import CardImage from "@/components/getImages";
 import Table from "@/components/table";
+import { jsonToCSV } from "react-papaparse";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 export default function Audit() {
   const [name, setName] = useState<string>("")
   const [number, setNumber] = useState<string>("")
-  const { csvData, setCsvData } = useDataContext();
+  const { csvData, fileName } = useDataContext();
   const headers: string[] = csvData[0];
   const [formattedData, setFormattedData] = useState<any[]>([]);
   const [currentRowIndex, setCurrentRowIndex] = useState<number>(0);
@@ -72,6 +73,21 @@ export default function Audit() {
       return newData;
     });
   };
+
+  const downloadCSV = () => {
+    const csvString = jsonToCSV(formattedData, { header: true });
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    const baseFileName = fileName.replace(/\.csv$/i, '');
+    const adjustedFileName = `${baseFileName}_adjusted.csv`;
+
+    link.setAttribute("download", adjustedFileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   
   return(
     <Box>
@@ -97,6 +113,11 @@ export default function Audit() {
           +1
         </Button>
       </Box>
+      <Box display="flex" justifyContent="center" mt={2}>
+            <Button variant="contained" color="success" onClick={downloadCSV} fullWidth>
+              Download CSV
+            </Button>
+          </Box>
 </Box>
         <Box>  <Table setName={setName} setNumber={setNumber} data={formattedData} setData={setFormattedData} setCurrentRowIndex={setCurrentRowIndex} currentRowIndex={currentRowIndex}/></Box>
       </Wrapper>
